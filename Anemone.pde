@@ -14,7 +14,7 @@ int cn = NUM - 1;
 Note[] notes = new Note[NUM];
 
 // Seconds to wait between notes
-int ts = 60 * 2;
+float ts = 60 * 2;
 int cts = 60 * 3;
 final int CTS_MIN = int(60 * 0.5);
 final int CTS_MAX = cts;
@@ -23,7 +23,7 @@ final int CTS_ROR = 5;
 // Serial connection
 Serial floor, fan;  
 boolean sfloor, sfan;
-int TH = 2048;
+int TH = 3600;
 
 // OSC connection
 OscP5 oscP5;
@@ -132,7 +132,8 @@ void draw() {
 
   // Update note to play every ts seconds
   int startcn = cn;
-  if (frameCount % ts == 0) {
+  if (frameCount % int(ts) == 0) {
+    println("HELLO");
     // Update CTS
     updateCTS(CTS_ROR);
 
@@ -211,6 +212,10 @@ void updateCTS(int change) {
   float rumbleVol = map(cts, CTS_MIN, CTS_MAX, 0, 1);
   println("NEW RUMBLE VOL: " + rumbleVol);
   rumble.amp(rumbleVol);
+  
+  // Update ts
+  ts = map(cts, CTS_MIN, CTS_MAX, 60 * 1, 60 * 5);
+  println("NEW TS: " + ts);
 }
 
 // Toggle click
